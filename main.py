@@ -1,4 +1,3 @@
-import os
 import pygame
 import random
 from pacman import PacMan
@@ -6,6 +5,8 @@ from ghost import Ghost
 from pellet import Pellet
 from maze import mazes, draw_maze
 from utils import draw_welcome_message
+from assets import pacman_images, pacman_images2, ghost_images, start_sound, eat_sound, lose_sound, win_sound
+
 
 # Initialize the game
 pygame.init()
@@ -18,38 +19,7 @@ pygame.display.set_caption("Pac-Man")
 # Define colors
 BLACK = (0, 0, 0)
 
-# Get the directory of the current script (main.py)
-base_dir = os.path.dirname(os.path.abspath(__file__))
 
-
-# Load images using the base directory
-## open mouth:
-pacman_images = {
-    'RIGHT': pygame.image.load(os.path.join(base_dir, 'right_pacman.png')),
-    'LEFT': pygame.image.load(os.path.join(base_dir, 'left_pacman.png')),
-    'UP': pygame.image.load(os.path.join(base_dir, 'up_pacman.png')),
-    'DOWN': pygame.image.load(os.path.join(base_dir, 'down_pacman.png'))
-}
-## close mouth:
-pacman_images2 = {
-    'RIGHT': pygame.image.load(os.path.join(base_dir, 'close_mouth_right.png')),
-    'LEFT': pygame.image.load(os.path.join(base_dir, 'close_mouth_left.png')),
-    'UP': pygame.image.load(os.path.join(base_dir, 'close_mouth_up.png')),
-    'DOWN': pygame.image.load(os.path.join(base_dir, 'close_mouth_down.png'))
-}
-ghost_images = [
-    pygame.image.load(os.path.join(base_dir, 'gohst1.png')),
-    pygame.image.load(os.path.join(base_dir, 'gohst2.png')),
-    pygame.image.load(os.path.join(base_dir, 'gohst3.png')),
-    pygame.image.load(os.path.join(base_dir, 'gohst4.png')),
-]
-
-# Load sound effects
-pygame.mixer.init()
-start_sound = pygame.mixer.Sound(os.path.join(base_dir, 'start.ogg'))
-eat_sound = pygame.mixer.Sound(os.path.join(base_dir, 'eat.ogg'))
-lose_sound = pygame.mixer.Sound(os.path.join(base_dir, 'lose.ogg'))
-win_sound = pygame.mixer.Sound(os.path.join(base_dir, 'win.ogg'))
 # Resize images to the same size
 cell_size = 20
 pacman_images = {key: pygame.transform.scale(img, (cell_size, cell_size)) for key, img in pacman_images.items()}
