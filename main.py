@@ -18,11 +18,19 @@ pygame.display.set_caption("Pac-Man")
 BLACK = (0, 0, 0)
 
 # Load images
+## open mouth:
 pacman_images = {
     'RIGHT': pygame.image.load('C:\\Users\\raz62\\Desktop\\all\\python\\pacman\\right_pacman.png'),
     'LEFT': pygame.image.load('C:\\Users\\raz62\\Desktop\\all\\python\\pacman\\left_pacman.png'),
     'UP': pygame.image.load('C:\\Users\\raz62\\Desktop\\all\\python\\pacman\\up_pacman.png'),
     'DOWN': pygame.image.load('C:\\Users\\raz62\\Desktop\\all\\python\\pacman\\down_pacman.png')
+}
+# clsoe mouth:
+pacman_images2 = {
+    'RIGHT': pygame.image.load('C:\\Users\\raz62\\Desktop\\all\\python\\pacman\\close_mouth_right.png'),
+    'LEFT': pygame.image.load('C:\\Users\\raz62\\Desktop\\all\\python\\pacman\\close_mouth_left.png'),
+    'UP': pygame.image.load('C:\\Users\\raz62\\Desktop\\all\\python\\pacman\\close_mouth_up.png'),
+    'DOWN': pygame.image.load('C:\\Users\\raz62\\Desktop\\all\\python\\pacman\\close_mouth_down.png')
 }
 ghost_images = [
     pygame.image.load('C:\\Users\\raz62\\Desktop\\all\\python\\pacman\\gohst1.png'),
@@ -38,10 +46,12 @@ eat_sound = pygame.mixer.Sound('C:\\Users\\raz62\\Desktop\\all\\python\\pacman\\
 lose_sound = pygame.mixer.Sound('C:\\Users\\raz62\\Desktop\\all\\python\\pacman\\lose.ogg')
 win_sound = pygame.mixer.Sound('C:\\Users\\raz62\\Desktop\\all\\python\\pacman\\win.ogg')
 
-# Resize images
+# Resize images to the same size
 cell_size = 20
 pacman_images = {key: pygame.transform.scale(img, (cell_size, cell_size)) for key, img in pacman_images.items()}
+pacman_images2 = {key: pygame.transform.scale(img, (cell_size, cell_size)) for key, img in pacman_images2.items()}
 ghost_images = [pygame.transform.scale(img, (30, 30)) for img in ghost_images]
+
 
 # Main function
 def main():
@@ -55,13 +65,15 @@ def main():
 
     def load_level(level):
         maze = mazes[level]  # Load the maze for the current level
-        pacman = PacMan(pacman_images, maze)  # Pass the maze to PacMan
+        pacman = PacMan(pacman_images, pacman_images2, maze)  # Pass both image sets
         pellets = [Pellet(col * cell_size + cell_size // 2, row * cell_size + cell_size // 2) 
-                   for row in range(len(maze)) 
-                   for col in range(len(maze[row])) 
-                   if maze[row][col] == '.']
+                for row in range(len(maze)) 
+                for col in range(len(maze[row])) 
+                if maze[row][col] == '.']
         ghosts = [Ghost(random.randint(0, width - 20), random.randint(0, height - 20), ghost_images[i], width, height) for i in range(4)]
         return maze, pacman, pellets, ghosts
+
+
 
     maze, pacman, pellets, ghosts = load_level(level)
 
