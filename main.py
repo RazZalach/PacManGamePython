@@ -84,7 +84,7 @@ def main():
             for pellet in pellets:
                 if abs(pacman.x - pellet.x) < pacman.size and abs(pacman.y - pellet.y) < pacman.size:
                     current_time = pygame.time.get_ticks()
-                    if current_time - last_eat_time > 300:
+                    if current_time - last_eat_time > 450:
                         eat_sound.play()
                         last_eat_time = current_time
                 else:

@@ -30,6 +30,6 @@ ghost_images = [
 # Load sound effects
 pygame.mixer.init()
 start_sound = pygame.mixer.Sound(os.path.join(assets_dir, 'start.ogg'))
-eat_sound = pygame.mixer.Sound(os.path.join(assets_dir, 'eat.ogg'))
+eat_sound = pygame.mixer.Sound(os.path.join(assets_dir, 'eat2.ogg'))
 lose_sound = pygame.mixer.Sound(os.path.join(assets_dir, 'lose.ogg'))
 win_sound = pygame.mixer.Sound(os.path.join(assets_dir, 'win.ogg'))
