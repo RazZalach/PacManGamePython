@@ -1,7 +1,8 @@
 import pygame
-from maze import maze
+from maze import mazes
+
 class PacMan:
-    def __init__(self, images, initial_x=30, initial_y=30, speed=5):
+    def __init__(self, images, maze, initial_x=30, initial_y=30, speed=5):
         self.x = initial_x
         self.y = initial_y
         self.size = 20
@@ -9,6 +10,7 @@ class PacMan:
         self.image = self.images['RIGHT']
         self.speed = speed
         self.direction = 'RIGHT'
+        self.maze = maze  # Store the maze
 
     def move(self):
         keys = pygame.key.get_pressed()
@@ -37,7 +39,7 @@ class PacMan:
         # Check collision with walls
         row = self.y // self.size
         col = self.x // self.size
-        if maze[row][col] == '#':
+        if self.maze[row][col] == '#':  # Use the maze passed in the constructor
             if self.direction == 'LEFT':
                 self.x += self.speed
             if self.direction == 'RIGHT':

@@ -3,7 +3,7 @@ import random
 from pacman import PacMan
 from ghost import Ghost
 from pellet import Pellet
-from maze import maze, draw_maze
+from maze import mazes, draw_maze
 from utils import draw_welcome_message
 
 # Initialize the game
@@ -51,15 +51,19 @@ def main():
     start_sound_length = int(start_sound.get_length() * 1000)
     last_eat_time = 0  # Initialize the time when the last eat sound was played
 
-    pacman = PacMan(pacman_images)
-    pellets = [Pellet(col * cell_size + cell_size // 2, row * cell_size + cell_size // 2) 
-               for row in range(len(maze)) 
-               for col in range(len(maze[row])) 
-               if maze[row][col] == '.']
-    
-    # Create ghosts with unique images
-    width, height = 500, 500  # Define the width and height of the window
-    ghosts = [Ghost(random.randint(0, width - 20), random.randint(0, height - 20), ghost_images[i], width, height) for i in range(4)]
+    level = 0  # Start at level 0
+
+    def load_level(level):
+        maze = mazes[level]  # Load the maze for the current level
+        pacman = PacMan(pacman_images, maze)  # Pass the maze to PacMan
+        pellets = [Pellet(col * cell_size + cell_size // 2, row * cell_size + cell_size // 2) 
+                   for row in range(len(maze)) 
+                   for col in range(len(maze[row])) 
+                   if maze[row][col] == '.']
+        ghosts = [Ghost(random.randint(0, width - 20), random.randint(0, height - 20), ghost_images[i], width, height) for i in range(4)]
+        return maze, pacman, pellets, ghosts
+
+    maze, pacman, pellets, ghosts = load_level(level)
 
     clock = pygame.time.Clock()
     run = True
@@ -105,14 +109,20 @@ def main():
 
             # Check win condition
             if not pellets:
-                win_sound.play()
-                pygame.display.update()
-                pygame.time.wait(int(win_sound.get_length() * 1000))
-                print("You Win!")
-                run = False
+                if level < len(mazes) - 1:  # Check if there are more levels
+                    level += 1
+                    maze, pacman, pellets, ghosts = load_level(level)
+                    start_time = pygame.time.get_ticks()  # Restart timer for new level
+                    start_sound.play()  # Play start sound again for the new level
+                else:
+                    win_sound.play()
+                    pygame.display.update()
+                    pygame.time.wait(int(win_sound.get_length() * 1000))
+                    print("You Win!")
+                    run = False
 
             win.fill(BLACK)
-            draw_maze(win, cell_size)
+            draw_maze(win, maze, cell_size)  # Pass the maze to draw_maze
             pacman.draw(win)
             for pellet in pellets:
                 pellet.draw(win)
