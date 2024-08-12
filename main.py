@@ -1,3 +1,4 @@
+import os
 import pygame
 import random
 from pacman import PacMan
@@ -17,35 +18,38 @@ pygame.display.set_caption("Pac-Man")
 # Define colors
 BLACK = (0, 0, 0)
 
-# Load images
+# Get the directory of the current script (main.py)
+base_dir = os.path.dirname(os.path.abspath(__file__))
+
+
+# Load images using the base directory
 ## open mouth:
 pacman_images = {
-    'RIGHT': pygame.image.load('C:\\Users\\raz62\\Desktop\\all\\python\\pacman\\right_pacman.png'),
-    'LEFT': pygame.image.load('C:\\Users\\raz62\\Desktop\\all\\python\\pacman\\left_pacman.png'),
-    'UP': pygame.image.load('C:\\Users\\raz62\\Desktop\\all\\python\\pacman\\up_pacman.png'),
-    'DOWN': pygame.image.load('C:\\Users\\raz62\\Desktop\\all\\python\\pacman\\down_pacman.png')
+    'RIGHT': pygame.image.load(os.path.join(base_dir, 'right_pacman.png')),
+    'LEFT': pygame.image.load(os.path.join(base_dir, 'left_pacman.png')),
+    'UP': pygame.image.load(os.path.join(base_dir, 'up_pacman.png')),
+    'DOWN': pygame.image.load(os.path.join(base_dir, 'down_pacman.png'))
 }
-# clsoe mouth:
+## close mouth:
 pacman_images2 = {
-    'RIGHT': pygame.image.load('C:\\Users\\raz62\\Desktop\\all\\python\\pacman\\close_mouth_right.png'),
-    'LEFT': pygame.image.load('C:\\Users\\raz62\\Desktop\\all\\python\\pacman\\close_mouth_left.png'),
-    'UP': pygame.image.load('C:\\Users\\raz62\\Desktop\\all\\python\\pacman\\close_mouth_up.png'),
-    'DOWN': pygame.image.load('C:\\Users\\raz62\\Desktop\\all\\python\\pacman\\close_mouth_down.png')
+    'RIGHT': pygame.image.load(os.path.join(base_dir, 'close_mouth_right.png')),
+    'LEFT': pygame.image.load(os.path.join(base_dir, 'close_mouth_left.png')),
+    'UP': pygame.image.load(os.path.join(base_dir, 'close_mouth_up.png')),
+    'DOWN': pygame.image.load(os.path.join(base_dir, 'close_mouth_down.png'))
 }
 ghost_images = [
-    pygame.image.load('C:\\Users\\raz62\\Desktop\\all\\python\\pacman\\gohst1.png'),
-    pygame.image.load('C:\\Users\\raz62\\Desktop\\all\\python\\pacman\\gohst2.png'),
-    pygame.image.load('C:\\Users\\raz62\\Desktop\\all\\python\\pacman\\gohst3.png'),
-    pygame.image.load('C:\\Users\\raz62\\Desktop\\all\\python\\pacman\\gohst4.png'),
+    pygame.image.load(os.path.join(base_dir, 'gohst1.png')),
+    pygame.image.load(os.path.join(base_dir, 'gohst2.png')),
+    pygame.image.load(os.path.join(base_dir, 'gohst3.png')),
+    pygame.image.load(os.path.join(base_dir, 'gohst4.png')),
 ]
 
 # Load sound effects
 pygame.mixer.init()
-start_sound = pygame.mixer.Sound('C:\\Users\\raz62\\Desktop\\all\\python\\pacman\\start.ogg')
-eat_sound = pygame.mixer.Sound('C:\\Users\\raz62\\Desktop\\all\\python\\pacman\\eat.ogg')
-lose_sound = pygame.mixer.Sound('C:\\Users\\raz62\\Desktop\\all\\python\\pacman\\lose.ogg')
-win_sound = pygame.mixer.Sound('C:\\Users\\raz62\\Desktop\\all\\python\\pacman\\win.ogg')
-
+start_sound = pygame.mixer.Sound(os.path.join(base_dir, 'start.ogg'))
+eat_sound = pygame.mixer.Sound(os.path.join(base_dir, 'eat.ogg'))
+lose_sound = pygame.mixer.Sound(os.path.join(base_dir, 'lose.ogg'))
+win_sound = pygame.mixer.Sound(os.path.join(base_dir, 'win.ogg'))
 # Resize images to the same size
 cell_size = 20
 pacman_images = {key: pygame.transform.scale(img, (cell_size, cell_size)) for key, img in pacman_images.items()}
@@ -74,7 +78,6 @@ def main():
         return maze, pacman, pellets, ghosts
 
 
-
     maze, pacman, pellets, ghosts = load_level(level)
 
     clock = pygame.time.Clock()
@@ -92,8 +95,16 @@ def main():
             win.fill(BLACK)
             draw_welcome_message(win, pygame.font.Font(None, 36))
             pygame.display.update()
+        elif current_time < start_time + start_sound_length + 1500:  # Show level number for 1.5 seconds
+            win.fill(BLACK)
+            level_message = f"Level-{level + 1}"  # Level numbering starts from 1
+            font = pygame.font.Font(None, 48)
+            text_surface = font.render(level_message, True, (255, 255, 255))
+            text_rect = text_surface.get_rect(center=(width // 2, height // 2))
+            win.blit(text_surface, text_rect)
+            pygame.display.update()
         else:
-            # Start the game after the welcome message
+            # Start the game after the level number is shown
             pacman.move()
             for ghost in ghosts:
                 ghost.move()
@@ -148,3 +159,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
